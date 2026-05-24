@@ -11,9 +11,7 @@ export default function FloatingContact() {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) setOpen(false);
     };
     if (open) document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -43,55 +41,63 @@ export default function FloatingContact() {
 
   return (
     <>
-      {/* Floating Button – "Hire Me" with bounce + glow */}
+      {/* Floating envelope button */}
       <motion.button
         onClick={() => setOpen(!open)}
-        whileHover={{ scale: 1.08 }}
+        whileHover={{ scale: 1.1, rotateY: 10 }}
         whileTap={{ scale: 0.95 }}
-        animate={{ y: [0, -6, 0] }}
-        transition={{ y: { repeat: Infinity, duration: 2, ease: "easeInOut" } }}
-        className="fixed bottom-6 left-6 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
+        className="fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-lg"
+        style={{ perspective: "600px" }}
+        aria-label="Contact Emelio"
       >
-        <span className="text-lg">💼</span> Hire Me
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+        <motion.div
+          className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"
+          animate={{ scale: [1, 1.3, 1] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        />
       </motion.button>
 
-      {/* Modal – playful and conversational */}
+      {/* Modal */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.9 }}
-            transition={{ type: "spring", damping: 20 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ type: "spring", stiffness: 200, damping: 20 }}
             ref={modalRef}
-            className="fixed bottom-24 left-6 z-50 w-80 rounded-2xl border border-white/10 bg-[#0f0f0f]/95 backdrop-blur-xl shadow-2xl p-5"
+            className="fixed bottom-24 left-6 z-50 w-80 rounded-2xl border border-white/10 bg-[#0f0f0f]/95 backdrop-blur-2xl shadow-2xl p-5"
           >
             <AnimatePresence mode="wait">
               {status === "success" ? (
                 <motion.div
                   key="success"
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className="text-center"
+                  className="text-center py-6"
                 >
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-500/20 text-green-400"
+                    className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-500/20 text-green-400"
                   >
-                    ✈️
+                    ✓
                   </motion.div>
-                  <p className="font-semibold text-lg">Message sent!</p>
-                  <p className="mt-1 text-sm text-white/50">I’ll reply faster than a rocket 🚀</p>
+                  <h3 className="text-lg font-bold">Message sent</h3>
+                  <p className="mt-1 text-sm text-white/50">I'll get back to you shortly.</p>
                   <button onClick={closeAndReset} className="mt-4 text-sm text-indigo-400 hover:underline">
                     Send another
                   </button>
                 </motion.div>
               ) : (
                 <motion.div key="form" exit={{ opacity: 0 }}>
-                  <h3 className="mb-1 text-lg font-bold">Let’s work together</h3>
-                  <p className="mb-4 text-xs text-white/50">I’m just one message away ✨</p>
+                  <h3 className="text-lg font-bold mb-2">Contact Emelio</h3>
+                  <p className="text-xs text-white/50 mb-4">Fill in your details and message</p>
                   <form onSubmit={handleSubmit} className="space-y-3">
                     <input
                       type="text"
@@ -103,7 +109,7 @@ export default function FloatingContact() {
                     />
                     <input
                       type="email"
-                      placeholder="Email address"
+                      placeholder="Your email"
                       required
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -111,25 +117,21 @@ export default function FloatingContact() {
                     />
                     <textarea
                       rows={3}
-                      placeholder="Tell me about your project…"
+                      placeholder="Your message"
                       required
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-indigo-500 focus:outline-none"
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-indigo-500 focus:outline-none resize-none"
                     />
                     <button
                       type="submit"
                       disabled={status === "sending"}
-                      className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 py-2.5 text-sm font-semibold text-white transition-all hover:from-indigo-400 hover:to-purple-400 disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition-all hover:bg-indigo-400 disabled:opacity-50"
                     >
-                      {status === "sending" ? (
-                        <>Sending <span className="animate-pulse">📨</span></>
-                      ) : (
-                        <>Send Message ✈️</>
-                      )}
+                      {status === "sending" ? "Sending..." : "Send Message"}
                     </button>
                     {status === "error" && (
-                      <p className="text-center text-xs text-red-400">Oops! Try again.</p>
+                      <p className="text-center text-xs text-red-400">Failed to send. Please try again.</p>
                     )}
                   </form>
                 </motion.div>
