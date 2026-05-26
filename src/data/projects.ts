@@ -4,7 +4,6 @@
   tech: string[];
   live?: string;
   github: string;
-  featured: boolean;
 }
 
 export const mainProjects: Project[] = [
@@ -15,31 +14,28 @@ export const mainProjects: Project[] = [
     tech: ["React", "Firebase", "CSS"],
     live: "https://emils18.github.io/Sched/",
     github: "https://github.com/Emils18",
-    featured: true,
   },
   {
     title: "Notetaker AI",
     description:
-      "AI‑powered note‑taking website – paste text, choose design, save as image.",
+      "AI‑powered note‑taking website – paste text, summerize Using OCR can read image and can make QnA about your content.",
     tech: ["Next.js", "AI APIs"],
-    github: "https://github.com/Emils18",
-    featured: true,
+    live: "https://notetaker-ai-xsgu.vercel.app/",
+    github: "https://github.com/Emils18/notetaker-ai",
   },
 ];
 
-export const secondaryProjects: Project[] = [
+export const otherProjects: Project[] = [
   {
     title: "Loan Management System",
     description: "Internal loan tracking system.",
     tech: ["ASP.NET", "C#", "SQL Server"],
     github: "https://github.com/Emils18",
-    featured: false,
   },
   {
     title: "Mobile Attendance",
     description: "Cross‑platform attendance app.",
     tech: ["Flutter"],
     github: "https://github.com/Emils18",
-    featured: false,
   },
 ];
